@@ -46,25 +46,31 @@ def view_entry():
     clear()
     select = input("What is the product ID: \n").strip()
     if select:
-        query = Product.select().where(Product.product_id == int(select))
-        if query:
-            for row in query:
-                price = convert_dollar(row.product_price)
-                print(f"The Product ID is {row.product_id}.\nThe Product Name is {row.product_name}\nThe Quantity is {row.product_quantity}\nThe Price is ${price}")
-        else:
-            print(f"No results for Product ID: {select}")
-
+        try:
+            query = Product.select().where(Product.product_id == int(select))
+            if query:
+                for row in query:
+                    price = convert_dollar(row.product_price)
+                    print(f"The Product ID is {row.product_id}.\nThe Product Name is {row.product_name}\nThe Quantity is {row.product_quantity}\nThe Price is ${price}")
+            else:
+                print(f"No results for Product ID: {select}")
+        except ValueError:
+            print('***** Try Again ***** \n** Please use a number **')
 
 def add_entry():
     '''Add A New Product '''
-    p_name = input("What is the product name: ").strip()
-    if p_name:
-        p_quantity = None or input("How many of the product is there: ").strip()
-        p_price = None or input("What does the product cost: ").strip()
-        now = datetime.datetime.now()
-        p_date = now.strftime('%m/%d/%Y')
-        add_data(product_name=p_name, product_quantity=p_quantity, product_price=p_price, date_updated=p_date)
-
+    while True:
+        p_name = input("What is the product name: ").strip()
+        if p_name:
+            p_quantity = None or input("How many of the product is there: ").strip()
+            p_price = None or input("What does the product cost: $").strip()
+            now = datetime.datetime.now()
+            p_date = now.strftime('%m/%d/%Y')
+            try:
+                add_data(product_name=p_name, product_quantity=p_quantity, product_price=p_price, date_updated=p_date)
+                break
+            except ValueError:
+                print("\nPlease enter a number for \'product quantity\' and \'product price\' \n")
 
 def backup_data(): 
     '''Create Backup Of Inventory'''

@@ -120,8 +120,8 @@ menu = OrderedDict([
 
 #Maintenance
 def clean_price(dollars):
-    dollars_ = float(dollars.replace("$","").replace(".",""))
-    return int(dollars_ * 100)
+    cents = int(str(float(dollars.replace("$",""))).replace(".", "").ljust(3, '0'))
+    return cents
 
 def convert_dollar(cent):
     return f"{float(cent/100):.2f}"
@@ -139,3 +139,5 @@ if __name__ == '__main__':
     initialize()
     csv_data() 
     menu_loop()
+
+
